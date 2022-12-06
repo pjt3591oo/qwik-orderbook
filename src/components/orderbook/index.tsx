@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { component$, useClientEffect$, useStore, useWatch$,  } from "@builder.io/qwik";
 
-import './index.css';
+import './index.css?inline';
 
 interface Order {
   ask_price: number;

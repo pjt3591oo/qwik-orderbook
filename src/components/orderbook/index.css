@@ -31,8 +31,6 @@ tr.bid .bar {
   box-sizing: border-box;
 }
 
-table#orderbook-table {
-}
 table#orderbook-desc {
   font-size: 15px;
 }

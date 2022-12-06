@@ -1,0 +1,89 @@
+div#coin {
+  font-size: 12px;
+  width: 100%;
+  max-width: 500px;
+}
+
+div#coin table {
+  max-width: 500px;
+  width: 100%;
+  border-spacing: 0px;
+  display: block;
+}
+
+div#coin table thead th,
+div#coin table tbody td {
+  width: 120px;
+  /* padding: 15px; */
+  box-sizing: border-box;
+}
+
+div#coin table thead th {
+  text-align: center;
+  height: 30px;
+  background-color: #f9fafc;
+  color: #666;
+  font-size: 11px;
+}
+
+div#coin table tbody {
+  display: block;
+  max-height: 600px;
+  overflow-y: scroll;
+  overscroll-behavior: auto;
+}
+
+div#coin table tbody td {
+  position: relative;
+  height: 44px;
+  vertical-align: middle;
+  box-sizing: border-box;
+}
+
+div#coin table tbody tr.select,
+div#coin table tbody tr:hover {
+  background-color: #f4f5f8;
+}
+
+div#coin table tr {
+  width: 100%;
+  cursor: pointer;
+  border: 1px solid #333;
+}
+
+div#coin table tbody td.align-right {
+  text-align: right;
+  padding-right: 3px;
+}
+div#coin table tbody td.align-left {
+  text-align: left;
+  padding-left: 3px;
+}
+
+.data-name {
+  color: #333;
+}
+
+.data-code {
+  color: #666;
+}
+
+.price.up {
+  color: #c84a31;
+}
+.price.down {
+  color: #1261c4;
+}
+.price.keep {
+  color: #333;
+}
+
+.price-border-up {
+  border: 1px solid #c84a31;
+}
+.price-border-down {
+  border: 1px solid #1261c4;
+}
+.price-border-keep {
+  border: 1px solid #333;
+}
