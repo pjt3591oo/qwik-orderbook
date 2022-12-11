@@ -18,6 +18,7 @@ export default component$(() => {
       <head>
         <meta charSet="utf-8" />
         <link rel="manifest" href="/manifest.json" />
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
         <RouterHead />
       </head>
       <body lang="en">

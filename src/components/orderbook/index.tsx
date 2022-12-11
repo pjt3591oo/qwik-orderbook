@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { component$, useClientEffect$, useStore, useWatch$,  } from "@builder.io/qwik";
 
-import './index.css?inline';
+import './index.css';
 
 interface Order {
   ask_price: number;
@@ -42,10 +42,9 @@ export const Orderbook = component$((props: Props) => {
       trade_price: 15,
     },
   });
-  
+
   useClientEffect$(async ({track}) => {
     const code = track(() => props.code);
-
     const ws = new WebSocket('wss://api.upbit.com/websocket/v1');
     const payload = [
       {"ticket":"UNIQUE_TICKET"},
@@ -86,7 +85,7 @@ export const Orderbook = component$((props: Props) => {
   }
 
   return (
-    <div>
+    <div id="orderbook">
       <table id="orderbook-table">
         <tbody id="orderbook" class="content">
           {[...store.orderbook.orderbook_units].reverse().map((unit: Order, index: number) => {
@@ -109,7 +108,6 @@ export const Orderbook = component$((props: Props) => {
               </tr>
             )
           })}
-
         
           {store.orderbook.orderbook_units.map((unit: Order, index: number) => {
             const tradeRate = percent(unit.bid_price, store.trade.prev_closing_price);

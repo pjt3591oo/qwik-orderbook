@@ -1,5 +1,6 @@
-import { component$, useStore, $, useClientEffect$ } from '@builder.io/qwik';
+import { component$, useStore, $, useServerMount$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
+import Chart from '~/components/chart';
 import { Coin } from '~/components/coin';
 import { Orderbook } from '~/components/orderbook';
 
@@ -13,7 +14,7 @@ export default component$(() => {
     store.code = code;
   })
 
-  useClientEffect$(async () => {
+  useServerMount$(async () => {
     const res = await fetch('https://api.upbit.com/v1/market/all?isDetails=true')
     
     const coins = await res.json();
@@ -24,7 +25,10 @@ export default component$(() => {
 
   return (
     <div>
-      <div style={{display: 'flex'}}>
+      <div style={{width: '100%', maxWidth: 1024}}>
+        <Chart code={store.code}/>
+      </div>
+      <div style={{display: 'flex', maxWidth: 1024}}>
         <div style={{width: '50%'}}>
           <Orderbook code={store.code}/>
         </div>
@@ -37,6 +41,7 @@ export default component$(() => {
           />
         </div>
       </div>
+  
     </div>
   );
 });

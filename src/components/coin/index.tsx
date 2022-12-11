@@ -1,6 +1,7 @@
+/* eslint-disable qwik/valid-lexical-scope */
 import { component$, PropFunction, useClientEffect$, useStore } from "@builder.io/qwik";
 import { BorderCell } from "./border-cell";
-import './index.css?inline';
+import './index.css';
 
 export interface Coin {
   market_warning: string; //"NONE",
@@ -51,16 +52,15 @@ interface Ticker {
   type: string;
 }
 
-export const Coin = component$((props: Props) => {
-  // useLexicalScope을 이용하면 부모돔의 상태도 접근 가능한 것으로 파악됨
+export const Coin = component$((props: {coins: Props['coins'], onCodeChangeHandler$: Props['onCodeChangeHandler$'], code: Props['code']}) => {
   const store = useStore({
-    price: {} as any
-  })
+    price: {} as any,
+  });
 
-  useClientEffect$(async () => {
-    
+  useClientEffect$(async ({track}) => {
+    const coins = track(() => props.coins);
     const ws = new WebSocket('wss://api.upbit.com/websocket/v1');
-    const codes = props.coins.map(coin => coin.market)//.slice(0, 20);
+    const codes = coins.map((coin: Coin) => coin.market)//.slice(0, 20);
 
     const payload = [
       {ticket: 'UNIQUE_TICKET'},
@@ -72,11 +72,9 @@ export const Coin = component$((props: Props) => {
 
     const receiveHandler = async (event: any) => {
       const data = JSON.parse(await event.data.text());
-      // console.log(data);
-      const temp = {...store.price}
+      const temp = {...store.price};
       temp[data.code] = data as Ticker;
-      store.price = {...temp};
-      console.log(data);
+      store.price = temp;
     }
 
     ws.addEventListener('message', receiveHandler);
@@ -103,7 +101,6 @@ export const Coin = component$((props: Props) => {
           </tr>
         </thead>
         <tbody>
-          {/* {props.coins.map(coin => <Row code={coin.market} onCodeChangeHandler$={props.onCodeChangeHandler$}/>)} */}
           {props.coins.map((coin: Coin) => {
             return (
               <tr 

@@ -23,7 +23,6 @@ export const BorderCell = component$((props: Props) => {
     } else {
       store.classname = 'price-border-keep';
     }
-    // console.log(props)
     setTimeout(() => {
       store.classname = '';
     }, 1000)
