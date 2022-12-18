@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { component$, useClientEffect$, useStore, useWatch$,  } from "@builder.io/qwik";
+import { component$, useClientEffect$, useStore, } from "@builder.io/qwik";
 
 import './index.css';
 
@@ -24,7 +23,7 @@ interface Props {
   code: string;
 }
 
-export const Orderbook = component$((props: Props) => {
+const Orderbook = component$((props: Props) => {
   const store = useStore({
     code: props.code,
     orderbook: {
@@ -147,3 +146,5 @@ export const Orderbook = component$((props: Props) => {
     </div>
   )
 })
+
+export { Orderbook };

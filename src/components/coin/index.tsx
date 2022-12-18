@@ -1,9 +1,7 @@
-/* eslint-disable qwik/valid-lexical-scope */
-import { component$, PropFunction, useClientEffect$, useStore } from "@builder.io/qwik";
+import { PropFunction, component$, useClientEffect$, useStore } from "@builder.io/qwik";
 import { BorderCell } from "./border-cell";
-import './index.css';
 
-export interface Coin {
+export interface ICoin {
   market_warning: string; //"NONE",
   market: string; //"KRW-BTC",
   korean_name: string; // "비트코인",
@@ -11,8 +9,8 @@ export interface Coin {
 }
 
 interface Props {
+  coins: ICoin[];
   code: string;
-  coins: Coin[];
   onCodeChangeHandler$: PropFunction<(code: string) => void>;
 }
 
@@ -52,15 +50,15 @@ interface Ticker {
   type: string;
 }
 
-export const Coin = component$((props: {coins: Props['coins'], onCodeChangeHandler$: Props['onCodeChangeHandler$'], code: Props['code']}) => {
+export const Coins = component$((props: Props) => {
   const store = useStore({
-    price: {} as any,
-  });
+    price: [] as any,
+  })
 
   useClientEffect$(async ({track}) => {
     const coins = track(() => props.coins);
     const ws = new WebSocket('wss://api.upbit.com/websocket/v1');
-    const codes = coins.map((coin: Coin) => coin.market)//.slice(0, 20);
+    const codes = coins.map((coin: ICoin) => coin.market)//.slice(0, 20);
 
     const payload = [
       {ticket: 'UNIQUE_TICKET'},
@@ -84,54 +82,55 @@ export const Coin = component$((props: {coins: Props['coins'], onCodeChangeHandl
     }
   })
 
+
   const getColor = (change: 'RISE' | 'FALL'): string => {
     if (change === 'RISE') return 'up';
     else if (change === 'FALL') return 'down';
     return 'keep';
   }
+
   return (
     <div id="coin">
-      <table>
-        <thead>
-          <tr>
-            <th class="align-left">한글명</th>
-            <th>현재가</th>
-            <th>전일대비</th>
-            <th>거래대금</th>
-          </tr>
-        </thead>
-        <tbody>
-          {props.coins.map((coin: Coin) => {
-            return (
-              <tr 
-                key={`${coin.market}-${store.price[coin.market]?.trade_price}`}
-                onClick$={() => props.onCodeChangeHandler$(coin.market)}
-                class={`${props.code === coin.market ? 'select' : ''}`}
-              >
-                <td class="align-left">
-                  <div class="data-name">{coin.korean_name}</div>
-                  <div class="data-code">{coin.market}</div>
-                </td>
-                
-                <BorderCell 
-                  color={getColor(store.price[coin.market]?.change)} 
-                  price={store.price[coin.market]?.trade_price || 0}
-                  change={store.price[coin.market]?.change}
-                  code={coin.market}
-                />
-                <td class="align-right">
-                  <div class={`price ${getColor(store.price[coin.market]?.change)}`}>{(store.price[coin.market]?.signed_change_rate * 100 || 0)?.toLocaleString()}%</div>
-                  <div class={`price ${getColor(store.price[coin.market]?.change)}`}>{store.price[coin.market]?.signed_change_price?.toLocaleString() || 0}</div>
-                </td>
-                <td class="align-right">
-                  <span>{store.price[coin.market]?.trade_price}</span>
-                </td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-    </div>
+    <table>
+      <thead>
+        <tr>
+          <th class="align-left">한글명</th>
+          <th>현재가</th>
+          <th>전일대비</th>
+          <th>거래대금</th>
+        </tr>
+      </thead>
+      <tbody>
+        {props.coins.map((coin: ICoin) => {
+          return (
+            <tr 
+              key={`${coin.market}-${store?.price[coin.market]?.trade_price}`}
+              onClick$={() => props.onCodeChangeHandler$(coin.market)}
+              class={`${props.code === coin.market ? 'select' : ''}`}
+            >
+              <td class="align-left">
+                <div class="data-name">{coin.korean_name}</div>
+                <div class="data-code">{coin.market}</div>
+              </td>
+              
+              <BorderCell 
+                color={getColor(store.price[coin.market]?.change)} 
+                price={store.price[coin.market]?.trade_price || 0}
+                change={store.price[coin.market]?.change}
+                code={coin.market}
+              />
+              <td class="align-right">
+                <div class={`price ${getColor(store.price[coin.market]?.change)}`}>{(store.price[coin.market]?.signed_change_rate * 100 || 0)?.toLocaleString()}%</div>
+                <div class={`price ${getColor(store.price[coin.market]?.change)}`}>{store.price[coin.market]?.signed_change_price?.toLocaleString() || 0}</div>
+              </td>
+              <td class="align-right">
+                <span>{store.price[coin.market]?.trade_price}</span>
+              </td>
+            </tr>
+          )
+        })}
+      </tbody>
+    </table>
+  </div>
   )
 })
-
